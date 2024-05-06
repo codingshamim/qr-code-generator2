@@ -1,49 +1,35 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const scanButton = document.getElementById("scanButton");
+    const scanButton = document.getElementById("scanButton");
+    const scannerContainer = document.getElementById("scannerContainer");
 
-  scanButton.addEventListener("click", function () {
-    Quagga.init(
-      {
-        inputStream: {
-          name: "Live",
-          type: "LiveStream",
-          constraints: {
-            width: 640,
-            height: 480,
-            facingMode: "environment", // or "user" for front camera
-          },
-        },
-        locator: {
-          patchSize: "medium",
-          halfSample: true,
-        },
-        decoder: {
-          readers: [
-            "ean_reader",
-            "ean_8_reader",
-            "code_39_reader",
-            "code_39_vin_reader",
-            "codabar_reader",
-            "upc_reader",
-            "upc_e_reader",
-            "i2of5_reader",
-          ],
-        },
-        locate: true,
-      },
-      function (err) {
-        if (err) {
-          console.error("Error initializing Quagga:", err);
-          return;
+    scanButton.addEventListener("click", function () {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    const video = document.createElement("video");
+                    video.srcObject = stream;
+                    scannerContainer.appendChild(video);
+                    video.play();
+
+                    const barcodeDetector = new BarcodeDetector();
+                    barcodeDetector.detect(video)
+                        .then(barcodes => {
+                            if (barcodes && barcodes.length > 0) {
+                                console.log("Scanning result:", barcodes[0].rawValue);
+                                // You can do further processing with the scanning result here
+                            } else {
+                                console.log("No barcode detected");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Barcode detection error:", error);
+                        });
+                })
+                .catch(function (error) {
+                    console.error("Error accessing camera:", error);
+                });
+        } else {
+            console.error("getUserMedia not supported on your browser");
         }
-        console.log("Initialization finished. Starting Quagga...");
-        Quagga.start();
-      }
-    );
-
-    Quagga.onDetected(function (result) {
-      console.log("Scanning result:", result.codeResult.code);
-      // You can do further processing with the scanning result here
     });
-  });
 });
