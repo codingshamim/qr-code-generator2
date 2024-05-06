@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Document</title>
+	<link rel="stylesheet" href="login.css" />
+	<script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="wrapper">
+			<img src="wifi_lock.png" alt="" />
+			<div>
+				<h1>Voucher Login</h1>
+
+				<input type="text" placeholder="User" class="inputFiled" />
+				<button class="scanBtn" id="scanButton">
+					<img class="icon" src="scanner.png" alt="scanner-icon" />
+					<span>Scan Qr Code</span>
+				</button>
+				<button class="scanBtn" id="loginBtn">
+					<img class="icon" src="login.png" alt="scanner-icon" />
+					<span>Login</span>
+				</button>
+				<span class="linkContainer">Free Trial availible <a href="#" class="link">Click Here</a></span>
+			</div>
+		</div>
+	</div>
+	<script src="scanQr.js" defer></script>
+</body>
+
+</html>
